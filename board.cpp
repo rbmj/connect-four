@@ -50,25 +50,25 @@ unsigned board::height() const {
 }
 
 range<board::row_iterator> board::by_rows() const {
-	return range<row_iterator>(
+	return make_range(
 		row_iterator(0, this),
 		row_iterator(height(), this)
 	);
 }
 range<board::column_iterator> board::by_columns() const {
-	return range<column_iterator>(
+	return make_range(
 		column_iterator(0, this),
 		column_iterator(num_bins(), this)
 	);
 }
 range<board::reverse_row_iterator> board::by_rows_reverse() const {
-	return range<reverse_row_iterator>(
+	return make_range(
 		reverse_row_iterator(row_iterator(height(), this)),
 		reverse_row_iterator(row_iterator(0, this))
 	);
 }
 range<board::reverse_column_iterator> board::by_columns_reverse() const {
-	return range<reverse_column_iterator>(
+	return make_range(
 		reverse_column_iterator(column_iterator(num_bins(), this)),
 		reverse_column_iterator(column_iterator(0, this))
 	);

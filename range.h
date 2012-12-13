@@ -15,4 +15,11 @@ public:
 };
 
 
+//now to reduce the necessary verbosity in users:
+//function allows template argument deduction
+template <class Iterator>
+range<Iterator> make_range(Iterator b, Iterator e) {
+	return range<Iterator>(b, e);
+}
+
 #endif
