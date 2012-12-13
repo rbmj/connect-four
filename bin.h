@@ -12,6 +12,8 @@ private:
 public:
 	explicit bin(unsigned); //construct a bin, given height
 	bin(const bin&) = default;
+	bin(bin&&) = default;
+	
 	bool insert(char); //insert into bin, ret. false if failure
 	char operator[](unsigned) const; //note this does not return a reference!
 	unsigned size() const;

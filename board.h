@@ -24,6 +24,9 @@ public:
 	typedef std::reverse_iterator<column_iterator> reverse_column_iterator;
 	
 	board(unsigned, unsigned); //make board(x, y) with dimensions
+	board(const board&) = default;
+	board(board&&) = default;
+	
 	char operator()(unsigned, unsigned) const;
 	char operator()(row_reference, column_reference) const;
 	position at(unsigned, unsigned) const;
