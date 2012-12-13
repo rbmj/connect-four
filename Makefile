@@ -1,4 +1,4 @@
-CFLAGS=-std=c++11
+CFLAGS=-std=c++11 -g
 OBJECTS=main.o bin.o board.o board_io.o
 
 all: connect-four
