@@ -28,7 +28,7 @@ char board::operator()(unsigned x, unsigned y) const {
 
 char board::operator()(board::row_reference r, board::column_reference c) const {
 	check_parents(r, c);
-	return (*this)(r.index, c.index);
+	return (*this)(c.index, r.index);
 }
 
 board::position board::at(unsigned x, unsigned y) const {
@@ -38,7 +38,7 @@ board::position board::at(unsigned x, unsigned y) const {
 
 board::position board::at(board::row_reference r, board::column_reference c) const {
 	check_parents(r, c);
-	return at(r.index, c.index);
+	return at(c.index, r.index);
 }
 
 unsigned board::num_bins() const {
