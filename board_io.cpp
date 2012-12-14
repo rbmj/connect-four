@@ -42,10 +42,10 @@ void output_indexes(std::ostream& str, const board& b) {
 
 //and *this beauty* is what all the work in board.cpp was for :)
 void output_data(std::ostream& str, const board& b) {
-	for (auto&& row : b.by_rows_reverse()) {
+	for (auto&& row : b.by_rows_reverse()) { //reverse so from top to bottom
 		str << '|';
-		for (auto&& column : b.by_columns()) {
-			str << ' ' << printable_id(b(row, column)) << " |";
+		for (auto&& element : row) {
+			str << ' ' << printable_id(element) << " |";
 		}
 		str << '\n';
 	}

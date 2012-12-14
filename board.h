@@ -7,6 +7,9 @@
 #include "bin.h"
 #include "range.h"
 
+//note to self: in free time develop mixin library to make writing
+//iterators less tedious.
+
 class board {
 private:
 	std::vector<bin> bins;
@@ -133,16 +136,8 @@ public:
 	typedef std::random_access_iterator_tag iterator_category;
 };
 
-//board::reference<Row>: right now just a dummy so that range-based
-//for will work nicely.  Later on might allow iteration in the second
-//dimension, but for right now that's handled by combining a row_reference
-//with a column_reference into a position, and then using an adapter.
-
-//this could be one class, but I want it to be two different types
-//to enforce that one has both a row and column reference and not
-//e.g. two row references.  Thus, for type saftey, there's a dummy
-//parameter.  This might be used later on if I ever decide to flush
-//out this class, but I don't think that the current assignment needs it
+//This class is a template in order to reduce the amount of boilerplate.
+//there's already enough of that in this file.
 template <bool Row>
 class board::reference {
 	friend class board::iterator<board::reference<Row>>;
@@ -152,9 +147,111 @@ private:
 	const board * parent;
 	reference(unsigned i, const board * p) : index(i), parent(p) {}
 public:
-	reference(const reference&) = default;
-	//i don't think I need to implement anything here yet
+	typedef board::reference<Row> Reference;
+	reference(const Reference&) = default;
+	
+	class iterator;
+	friend class Reference::iterator;
+	
+	//have to define this later...
+	iterator begin();
+	iterator end();
+	
+	typedef std::reverse_iterator<iterator> reverse_iterator;
+	
+	range<reverse_iterator> reverse() {
+		return make_range(reverse_iterator(end()), reverse_iterator(begin()));
+	}
 };
+
+
+//so much of this is directly copied from board::iterator...
+//it makes me angry.  
+template <bool Row>
+class board::reference<Row>::iterator {
+	friend class board::reference<Row>;
+private:
+	unsigned index;
+	board::reference<Row> * ref;
+	iterator(unsigned i, board::reference<Row>* r) : index(i), ref(r) {}
+public:
+	typedef board::reference<Row>::iterator Self;
+	iterator(const Self&) = default;
+	iterator() = default;
+	Self& operator++() {
+		++index;
+	}
+	Self operator++(int) {
+		Self ret(*this);
+		++(*this);
+		return ret;
+	}
+	Self& operator--() {
+		--index;
+	}
+	Self operator--(int) {
+		Self ret(*this);
+		--(*this);
+		return ret;
+	}
+	Self& operator+=(unsigned offset) {
+		index += offset;
+	}
+	Self& operator-=(unsigned offset) {
+		index -= offset;
+	}
+	Self operator+(unsigned offset) const {
+		return Self(*this) += offset;
+	}
+	Self operator-(unsigned offset) const {
+		return Self(*this) -= offset;
+	}
+	char operator*() const {
+		if (Row) {
+			//ref's index is the row, this's index is the column
+			return (*(ref->parent))(index, ref->index);
+		}
+		else {
+			//ref's index is the column, this's index is the row
+			return (*(ref->parent))(ref->index, index);
+		}
+	}
+	board::position at() {
+		if (Row) {
+			return ref->parent->at(index, ref->index);
+		}
+		else {
+			return ref->parent->at(ref->index, index);
+		}
+	}
+	char operator[](unsigned offset) {
+		return *(*this + offset);
+	}
+	bool operator<(const Self& other) { return index < other.index; }
+	bool operator<=(const Self& other) { return index <= other.index; }
+	bool operator>(const Self& other) { return index > other.index; }
+	bool operator>=(const Self& other) { return index >= other.index; }
+	bool operator==(const Self& other) { return index == other.index; }
+	bool operator!=(const Self& other) { return index != other.index; }
+	
+};
+
+template <bool Row>
+inline typename board::reference<Row>::iterator board::reference<Row>::begin() {
+	return iterator(0, this);
+}
+
+template <bool Row>
+inline typename board::reference<Row>::iterator board::reference<Row>::end() {
+	if (Row) {
+		//reference is a row, so need number of columns
+		return iterator(parent->num_bins(), this);
+	}
+	else {
+		//reference is a column, need number of rows
+		return iterator(parent->height(), this);
+	}
+}
 
 //the adapters in this class map different types of movement through
 //the board to different type of iterators
