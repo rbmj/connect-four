@@ -25,6 +25,10 @@ public:
 	typedef iterator<column_reference> column_iterator;
 	typedef std::reverse_iterator<row_iterator> reverse_row_iterator;
 	typedef std::reverse_iterator<column_iterator> reverse_column_iterator;
+	typedef std::vector<bin>::iterator bin_iterator;
+	typedef std::vector<bin>::reverse_iterator reverse_bin_iterator;
+	typedef std::vector<bin>::const_iterator const_bin_iterator;
+	typedef std::vector<bin>::const_reverse_iterator const_reverse_bin_iterator;
 	
 	board(unsigned, unsigned); //make board(x, y) with dimensions
 	board(const board&) = default;
@@ -40,6 +44,10 @@ public:
 	range<column_iterator> by_columns() const;
 	range<reverse_row_iterator> by_rows_reverse() const;
 	range<reverse_column_iterator> by_columns_reverse() const;
+	range<bin_iterator> by_bins();
+	range<reverse_bin_iterator> by_bins_reverse();
+	range<const_bin_iterator> by_bins() const;
+	range<const_reverse_bin_iterator> by_bins_reverse() const;
 	bool insert(unsigned, char);
 private:
 	void check_bounds(unsigned, unsigned) const;
@@ -180,6 +188,7 @@ public:
 	iterator() = default;
 	Self& operator++() {
 		++index;
+		return *this;
 	}
 	Self operator++(int) {
 		Self ret(*this);
@@ -188,6 +197,7 @@ public:
 	}
 	Self& operator--() {
 		--index;
+		return *this;
 	}
 	Self operator--(int) {
 		Self ret(*this);

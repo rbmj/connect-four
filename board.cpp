@@ -74,6 +74,24 @@ range<board::reverse_column_iterator> board::by_columns_reverse() const {
 	);
 }
 
+//this has a slightly different semantic meaning, and is less abstract
+//than by_columns()... but here, we'll allow non-const
+range<board::bin_iterator> board::by_bins() {
+	return make_range(bins.begin(), bins.end());
+}
+
+range<board::reverse_bin_iterator> board::by_bins_reverse() {
+	return make_range(bins.rbegin(), bins.rend());
+}
+
+range<board::const_bin_iterator> board::by_bins() const {
+	return make_range(bins.cbegin(), bins.cend());
+}
+
+range<board::const_reverse_bin_iterator> board::by_bins_reverse() const {
+	return make_range(bins.crbegin(), bins.crend());
+}
+
 bool board::insert(unsigned bin_num, char id) {
 	return bins[bin_num].insert(id);
 }

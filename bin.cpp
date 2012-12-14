@@ -21,3 +21,12 @@ char bin::operator[](unsigned i) const {
 unsigned bin::size() const {
 	return positions.size();
 }
+
+bool bin::full() const {
+	for (const auto& x: positions) {
+		if (x == 0) {
+			return false;
+		}
+	}
+	return true;
+}

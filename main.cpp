@@ -1,16 +1,17 @@
 #include <iostream>
+#include <vector>
+#include <memory>
 
 #include "board.h"
 #include "board_io.h"
+#include "player.h"
+
+#include "game_setup.h"
 
 int main() {
-	std::cout << "How many bins? ";
-	unsigned bins;
-	std::cin >> bins;
-	std::cout << "How high? ";
-	unsigned height;
-	std::cin >> height;
-	board b(bins, height);
+	board b = setup_board();
+	auto players = setup_players();
 	std::cout << b;
 	return 0;
 }
+

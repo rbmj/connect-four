@@ -17,6 +17,7 @@ public:
 	bool insert(char); //insert into bin, ret. false if failure
 	char operator[](unsigned) const; //note this does not return a reference!
 	unsigned size() const;
+	bool full() const;
 	
 };
 
