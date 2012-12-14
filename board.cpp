@@ -32,7 +32,7 @@ char board::operator()(board::row_reference r, board::column_reference c) const 
 }
 
 board::position board::at(unsigned x, unsigned y) const {
-	check_bounds(x, y);
+	//check_bounds(x, y); //don't check bounds until dereference
 	return position(x, y, this);
 }
 
@@ -109,81 +109,40 @@ char board::position::operator*() const {
 	return (*parent)(x, y);
 }
 
-//these move a position marker in the board array.  Note that as a key
-//invariant if they fail they do NOT modify the position
-
 void board::position::left() {
-	if (x == 0) {
-		throw std::range_error("cannot move left - index out of range");
-	}
 	--x;
 }
 
 void board::position::right() {
-	if (++x == parent->num_bins()) {
-		--x;
-		throw std::range_error("cannot move right - index out of range");
-	}
+	++x;
 }
 
 void board::position::up() {
-	if (++y == parent->height()) {
-		--y;
-		throw std::range_error("cannot move up - index out of range");
-	}
+	++y;
 }
 
 void board::position::down() {
-	if (y == 0) {
-		throw std::range_error("cannot move down - index out of range");
-	}
 	--y;
 }
 
 void board::position::upright() {
-	up(); //if this fails just let it keep unwinding
-	try {
-		right(); //try moving right
-	}
-	catch (std::range_error& e) {
-		--y; //we can't move right - so move back down
-		throw; //rethrow exception
-	}
+	up();
+	right();
 }
-
-//that idiom is repeated in the others:
 
 void board::position::downright() {
 	down();
-	try {
-		right();
-	}
-	catch (std::range_error& e) {
-		++y;
-		throw;
-	}
+	right();
 }
 
 void board::position::downleft() {
 	down();
-	try {
-		left();
-	}
-	catch (std::range_error& e) {
-		++y;
-		throw;
-	}
+	left();
 }
 
 void board::position::upleft() {
 	up();
-	try {
-		left();
-	}
-	catch (std::range_error& e) {
-		--y;
-		throw;
-	}
+	left();
 }
 
 bool board::position::operator==(const board::position& other) const {

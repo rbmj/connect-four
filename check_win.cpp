@@ -44,7 +44,7 @@ bool check_win(board& b, unsigned x, char id, unsigned to_win) { //x == bin of l
 	//last move was at x,y
 	
 	//check row
-	if (check_win(range<adapters::horiz_it>(b.at(0, y), b.at(w, 0)), id, to_win)) {
+	if (check_win(range<adapters::horiz_it>(b.at(0, y), b.at(w, y)), id, to_win)) {
 		return true;
 	}
 	
@@ -90,18 +90,20 @@ bool check_win(board& b, unsigned x, char id, unsigned to_win) { //x == bin of l
 	}
 	
 	//down slope
+	//there are some unsigned -1s because i need an invalid index that is
+	//= to --0, so the underflow is OK.  It will never be dereferenced.
 	intercept = x + y;
 	if (intercept < hs) {
 		xi = 0;
 		yi = (unsigned) intercept;
 	}
 	else {
-		xi = (unsigned)(intercept - hs);
-		yi = h;
+		xi = (unsigned)(intercept - hs) + 1;
+		yi = h - 1;
 	}
 	if (intercept < ws) {
-		xf = (unsigned) intercept;
-		yf = 0;
+		xf = (unsigned) intercept + 1;
+		yf = (unsigned) -1;
 	}
 	else {
 		xf = w;

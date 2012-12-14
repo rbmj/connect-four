@@ -22,6 +22,7 @@ int main() {
 			auto move = players[i]->move(b, player_id);
 			if (check_win(b, move, player_id, connect_n)) {
 				winner = player_id;
+				break;
 			}
 			else {
 				bool full = true;
@@ -32,13 +33,14 @@ int main() {
 					}
 				}
 				if (full) {
-					winner = 255; //indicates a draw
+					winner = -1; //indicates a draw
+					break;
 				}
 			}
 		}
 	}
 	std::cout << b << std::endl;
-	if (winner == 255) {
+	if (winner == -1) {
 		std::cout << "This game was a draw.\n";
 	}
 	else {

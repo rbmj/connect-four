@@ -33,7 +33,7 @@ unsigned random_ai::move(board& b, char id) {
 		}
 	}
 	assert(free_bins.size() != 0); //should be checked for elsewhere
-	unsigned into = free_bins[random_generator()()];
+	unsigned into = free_bins[random_generator()() % free_bins.size()];
 	bool success = b.insert(into, id);
 	assert(success);
 	think();
