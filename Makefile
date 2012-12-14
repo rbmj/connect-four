@@ -10,7 +10,7 @@ clean:
 connect-four: $(OBJECTS)
 	g++ $(CFLAGS) -o connect-four $(OBJECTS)
 	
-main.o: main.cpp board.h board_io.h player.h game_setup.h
+main.o: main.cpp board.h board_io.h player.h game_setup.h check_win.h
 	g++ $(CFLAGS) -c -o main.o main.cpp
 	
 bin.o: bin.cpp bin.h
