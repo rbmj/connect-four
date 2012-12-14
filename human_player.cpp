@@ -1,11 +1,11 @@
 #include "human_player.h"
 #include <iostream>
 
-void human_player::move(board& b, char id) {
+unsigned human_player::move(board& b, char id) {
 	bool moved = false;
+	unsigned bin;
 	while (!moved) {
 		std::cout << "Where would you like to go? ";
-		unsigned bin;
 		std::cin >> bin;
 		--bin; //change from 1..x to 0..x-1
 		if (bin >= b.num_bins()) {
@@ -18,4 +18,5 @@ void human_player::move(board& b, char id) {
 			}
 		}
 	}
+	return bin;
 }

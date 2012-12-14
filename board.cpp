@@ -73,7 +73,7 @@ range<board::reverse_column_iterator> board::by_columns_reverse() const {
 		reverse_column_iterator(column_iterator(0, this))
 	);
 }
-
+ /*
 //this has a slightly different semantic meaning, and is less abstract
 //than by_columns()... but here, we'll allow non-const
 range<board::bin_iterator> board::by_bins() {
@@ -90,6 +90,15 @@ range<board::const_bin_iterator> board::by_bins() const {
 
 range<board::const_reverse_bin_iterator> board::by_bins_reverse() const {
 	return make_range(bins.crbegin(), bins.crend());
+}
+*/
+
+bin& board::operator[](unsigned i) {
+	return bins[i];
+}
+
+const bin& board::operator[](unsigned i) const {
+	return bins[i];
 }
 
 bool board::insert(unsigned bin_num, char id) {
@@ -175,4 +184,12 @@ void board::position::upleft() {
 		--y;
 		throw;
 	}
+}
+
+bool board::position::operator==(const board::position& other) const {
+	return (x == other.x) && (y == other.y);
+}
+
+bool board::position::operator!=(const board::position& other) const {
+	return !(*this == other);
 }

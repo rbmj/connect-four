@@ -12,7 +12,7 @@ void think();
 
 class random_ai : public player {
 public:
-	virtual void move(board&, char) override;
+	virtual unsigned move(board&, char) override;
 };
 
 #endif

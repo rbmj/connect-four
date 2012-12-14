@@ -1,5 +1,5 @@
 CFLAGS=-std=c++11 -g -Wall
-OBJECTS=main.o bin.o board.o board_io.o game_setup.o human_player.o random_ai.o
+OBJECTS=main.o bin.o board.o board_io.o game_setup.o human_player.o random_ai.o check_win.o
 
 all: connect-four
 
@@ -30,4 +30,7 @@ human_player.o: human_player.cpp human_player.h
 	
 random_ai.o: random_ai.cpp random_ai.h bin.h board.h
 	g++ $(CFLAGS) -c -o random_ai.o random_ai.cpp
+	
+check_win.o: check_win.cpp check_win.h board.h bin.h range.h
+	g++ $(CFLAGS) -c -o check_win.o check_win.cpp
 

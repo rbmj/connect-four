@@ -6,7 +6,7 @@
 
 class human_player : public player {
 public:
-	virtual void move(board&, char) override;
+	virtual unsigned move(board&, char) override;
 };
 
 #endif

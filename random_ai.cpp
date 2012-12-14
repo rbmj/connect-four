@@ -25,16 +25,18 @@ std::minstd_rand& random_generator() {
 	return *gen;
 }
 
-void random_ai::move(board& b, char id) {
-	std::vector<bin*> bins;
-	for (bin& current : b.by_bins()) {
-		if (!current.full()) {
-			bins.push_back(&current);
+unsigned random_ai::move(board& b, char id) {
+	std::vector<unsigned> free_bins;
+	for (unsigned i = 0; i < b.num_bins(); ++i) {
+		if (!b[i].full()) {
+			free_bins.push_back(i);
 		}
 	}
-	assert(bins.size() != 0); //should be checked for elsewhere
-	bool success = bins[random_generator()()]->insert(id);
+	assert(free_bins.size() != 0); //should be checked for elsewhere
+	unsigned into = free_bins[random_generator()()];
+	bool success = b.insert(into, id);
 	assert(success);
 	think();
+	return into;
 }
 	

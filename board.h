@@ -44,10 +44,15 @@ public:
 	range<column_iterator> by_columns() const;
 	range<reverse_row_iterator> by_rows_reverse() const;
 	range<reverse_column_iterator> by_columns_reverse() const;
+	/*
 	range<bin_iterator> by_bins();
 	range<reverse_bin_iterator> by_bins_reverse();
 	range<const_bin_iterator> by_bins() const;
 	range<const_reverse_bin_iterator> by_bins_reverse() const;
+	*/
+	
+	bin& operator[](unsigned);
+	const bin& operator[](unsigned) const;
 	bool insert(unsigned, char);
 private:
 	void check_bounds(unsigned, unsigned) const;
@@ -74,6 +79,8 @@ public:
 	void upleft();
 	void downright();
 	void downleft();
+	bool operator==(const board::position& other) const;
+	bool operator!=(const board::position& other) const;
 };
 
 //a random access iterator that can iterate through the rows/columns
@@ -277,11 +284,11 @@ namespace adapters {
 	template <movement_func Decrement, movement_func Increment>
 	class generic_adapter {
 	private:
-		board::position& pos;
+		board::position pos;
 	public:
 		typedef generic_adapter<Decrement, Increment> Self;
 		
-		generic_adapter(board::position& p) : pos(p) {} //allow implicit
+		generic_adapter(const board::position& p) : pos(p) {} //allow implicit
 		generic_adapter(const Self&) = default;
 		
 		char operator*() const { return *pos; } //delegate
@@ -306,6 +313,14 @@ namespace adapters {
 			Self ret(*this);
 			--(*this);
 			return ret;
+		}
+		
+		bool operator!=(const Self& other) const {
+			return pos != other.pos;
+		}
+		
+		bool operator==(const Self& other) const {
+			return pos == other.pos;
 		}
 	}; //so that whole class is basically boilerplate...
 	
